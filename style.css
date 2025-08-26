@@ -5,64 +5,240 @@
 }
 
 body {
-  background: linear-gradient(to right, #1f1c2c, #0d0d10);
-  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #1f1c2c, #0d0d10);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: white;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
+  align-items: center;
+  padding: 20px;
+  overflow-x: hidden;
 }
 
-/* Layout */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-weight: 700;
+  background: linear-gradient(45deg, #ffd700, #ff6347);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+}
+
+.header p {
+  font-size: clamp(0.8rem, 2vw, 1.1rem);
+  color: #ccc;
+  opacity: 0.8;
+}
+
+/* Responsive Grid Layout */
 .keys {
   display: grid;
-  grid-template-columns: repeat(9, minmax(90px, 1fr));
-  gap: 20px;
-  padding: 30px;
-  width: 90%;
-  max-width: 800px;
+  gap: clamp(8px, 2vw, 20px);
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 10px;
+}
+
+/* Desktop: 9 columns */
+@media (min-width: 1024px) {
+  .keys {
+    grid-template-columns: repeat(9, 1fr);
+    max-width: 900px;
+  }
+}
+
+/* Tablet: 6 columns */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .keys {
+    grid-template-columns: repeat(6, 1fr);
+    max-width: 700px;
+  }
+}
+
+/* Mobile Large: 4 columns */
+@media (min-width: 480px) and (max-width: 767px) {
+  .keys {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 500px;
+  }
+}
+
+/* Mobile Small: 3 columns */
+@media (max-width: 479px) {
+  .keys {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 350px;
+  }
 }
 
 /* Key Styles */
 .key {
-  border: 2px solid white;
-  border-radius: 10px;
-  padding: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: clamp(8px, 1.5vw, 15px);
+  padding: clamp(10px, 3vw, 20px);
   text-align: center;
-  background-color: rgba(18, 14, 14, 0.1);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  transition: all 0.1s ease;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+}
+
+.key::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.key:hover::before {
+  transform: translateX(100%);
 }
 
 .key:hover {
-  transform: scale(1.05);
-  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.key:active {
+  transform: translateY(0) scale(0.95);
 }
 
 /* Animation when playing */
-.key.playing{
-  transform: scale(1.1);
-  box-shadow: 0 0 15px #ffd700, 0 0 25px #ff6347;
+.key.playing {
+  transform: scale(1.05) translateY(-3px);
+  background: linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 0.2),
+    rgba(255, 99, 71, 0.2)
+  );
   border-color: #ffd700;
-
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 99, 71, 0.4),
+    0 8px 20px rgba(0, 0, 0, 0.5);
+  animation: pulse 0.3s ease-out;
 }
 
+@keyframes pulse {
+  0% {
+    transform: scale(1.05) translateY(-3px);
+  }
+  50% {
+    transform: scale(1.1) translateY(-5px);
+  }
+  100% {
+    transform: scale(1.05) translateY(-3px);
+  }
+}
 
-
-/* Inner elements */
+/* Typography */
 kbd {
   display: block;
-  font-size: 1.5rem;
-  margin-bottom: 5px;
-  font-weight: bold;
+  font-size: clamp(1rem, 2.5vw, 1.8rem);
+  font-weight: 700;
+  margin-bottom: clamp(2px, 1vw, 8px);
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  line-height: 1;
 }
 
 .sound {
-  font-size: 0.5rem;
+  font-size: clamp(0.6rem, 1.2vw, 0.9rem);
   color: #ccc;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  opacity: 0.8;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
+/* Instructions */
+.instructions {
+  text-align: center;
+  margin-top: 30px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
+}
+
+/* Touch feedback for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .key:hover {
+    transform: none;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  .key:active {
+    transform: scale(0.9);
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Very small screens adjustments */
+@media (max-width: 320px) {
+  body {
+    padding: 10px;
+  }
+
+  .keys {
+    gap: 6px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .key {
+    min-height: 50px;
+    padding: 8px;
+  }
+}
+
+/* Landscape mobile optimization */
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    padding: 10px;
+  }
+
+  .header {
+    margin-bottom: 15px;
+  }
+
+  .keys {
+    grid-template-columns: repeat(6, 1fr);
+    max-width: 600px;
+  }
+
+  .instructions {
+    margin-top: 15px;
+  }
+}
